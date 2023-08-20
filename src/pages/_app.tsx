@@ -3,22 +3,29 @@ import { globalStyles } from "../styles/global"
 import Image from "next/image"
 import logoImg from '../assets/logo.svg'
 import { Container, Header } from "../styles/pages/app"
-import { CartButton } from "../components/CartButton"
-
+import { useRouter } from "next/router"
+import { Cart } from "../components/Cart"
+import { CartContextProvider } from "../contexts/cartContext"
 
 globalStyles()
 
 export function MyApp({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter();
+
+  const showCartButton = pathname !== "/success";
+
   return (
-    <Container>
-      <Header>
-        <Image src={logoImg} alt="" />
+    <CartContextProvider>
+      <Container>
+        <Header>
+          <Image src={logoImg} alt="" />
 
-        <CartButton />
-      </Header>
+          { showCartButton && <Cart /> }
+        </Header>
 
-      <Component {...pageProps} />
-    </Container>
+        <Component {...pageProps} />
+      </Container>
+    </CartContextProvider>
   )
 }
 
